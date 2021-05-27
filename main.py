@@ -30,7 +30,8 @@ def index():
         # Grabbing data
         if request.content_type == "application/json":
             content = request.get_json()
-            urls = content['links'].split(', ')
+
+            urls = content['links']
         elif request.content_type in (
             "application/x-www-form-urlencoded",
             "multipart/form-data",

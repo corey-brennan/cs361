@@ -37,7 +37,7 @@ def calculate_article_health(urls):
                 r = requests.get(url)
             except requests.exceptions.RequestException as e:  # This is the correct syntax
                 notWorking.append(url)
-                break;
+                continue;
                 
             # Checking if status code is appropriate
             if r and r.status_code >= 200 and r.status_code < 300:
