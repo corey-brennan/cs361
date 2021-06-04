@@ -7,7 +7,7 @@ from google.cloud import datastore
 from json2html import *
 from urllib.parse import urlencode
 from flask import Flask, redirect, url_for, render_template, request, flash, session
-from helper_functions import calculate_article_health
+from helper_functions import calculate_article_health, calculate_article_health_threaded
 import flask
 import json
 import logging
@@ -32,6 +32,10 @@ def index():
             content = request.get_json()
 
             urls = content['links']
+
+            if type(urls) == str:
+                urls = urls.split(', ')
+
         elif request.content_type in (
             "application/x-www-form-urlencoded",
             "multipart/form-data",
@@ -41,9 +45,9 @@ def index():
             return (json.dumps({"Error":"Unsupported Media Type"}), 415)
 
         if request.content_type == "application/json":
-            return (json.dumps(calculate_article_health(urls)))
+            return (json.dumps(calculate_article_health_threaded(urls)))
         else:
-            return render_template('links.html', articleLinks=calculate_article_health(urls))
+            return render_template('links.html', articleLinks=calculate_article_health_threaded(urls))
 
     else:
         return ("Method not recognized")
